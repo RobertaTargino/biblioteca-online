@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 // rota inicial
 app.get('/', (req, res) => {
-  res.send('Biblioteca Online - API');
+  res.send('Biblioteca Online - Bem-vindo!');
 });
 
 // login
