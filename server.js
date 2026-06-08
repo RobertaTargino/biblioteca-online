@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 dotenv.config();
 
@@ -33,6 +35,38 @@ app.post('/login', (req, res) => {
 
   return res.status(401).json({ mensagem: 'Credenciais inválidas' });
 });
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API Biblioteca Online',
+      version: '1.0.0',
+      description: 'Documentação da API da Biblioteca Online'
+    },
+    servers: [
+      {
+        url: 'https://biblioteca-online-bxyv.onrender.com'
+      },
+      {
+        url: 'http://localhost:3000'
+      }
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    }
+  },
+  apis: ['./routes/*.js']
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // rotas de livros
 const livrosRouter = require('./routes/livros');
