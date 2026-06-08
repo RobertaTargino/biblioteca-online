@@ -14,28 +14,7 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 
-// rota inicial
-app.get('/', (req, res) => {
-  res.send('Biblioteca Online - Bem-vindo!');
-});
-
-// login
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-
-  if (email === 'admin@biblioteca.com' && password === '123456') {
-    const token = jwt.sign(
-      { email, role: 'admin' },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    return res.json({ token });
-  }
-
-  return res.status(401).json({ mensagem: 'Credenciais inválidas' });
-});
-
+// Swagger
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -67,6 +46,28 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// rota inicial
+app.get('/', (req, res) => {
+  res.send('Biblioteca Online - Bem-vindo!');
+});
+
+// login
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
+
+  if (email === 'admin@biblioteca.com' && password === '123456') {
+    const token = jwt.sign(
+      { email, role: 'admin' },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    return res.json({ token });
+  }
+
+  return res.status(401).json({ mensagem: 'Credenciais inválidas' });
+});
 
 // rotas de livros
 const livrosRouter = require('./routes/livros');
